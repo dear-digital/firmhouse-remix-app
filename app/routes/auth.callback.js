@@ -21,7 +21,7 @@ export let loader = async ({ request }) => {
     // Handle the Shopify callback
     const callbackResponse = await shopify.auth.callback({
       rawRequest: request, // Remix request
-      rawResponse: new Response(), // Not used in this case
+      // rawResponse: new Response(), // Not used in this case
     });
 
     console.log(callbackResponse); // Log the session data for debugging

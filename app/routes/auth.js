@@ -31,7 +31,7 @@ export let loader = async ({ request }) => {
       callbackPath: "/auth/callback",
       isOnline: true,
       rawRequest: request, // Request from Remix
-      rawResponse: new Response(), // Response placeholder, won't be used
+      // rawResponse: new Response(), // Response placeholder, won't be used
     });
 
     // Redirect the user to the Shopify authentication page
