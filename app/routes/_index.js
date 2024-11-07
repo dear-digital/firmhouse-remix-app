@@ -1,3 +1,26 @@
+// routes/index.js
+import { redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
+
+// Mock shop data (replace with your actual logic)
+let shops = {};
+
+export let loader = async ({ request }) => {
+  // Get the query parameters
+  let url = new URL(request.url);
+  let shop = url.searchParams.get("shop");
+
+  // Check if the shop exists
+  if (typeof shops[shop] !== "undefined") {
+    // Return a simple text response
+    return new Response("Hello World");
+  } else {
+    // Redirect to the /auth route with the shop query param
+    return redirect(`/auth?shop=${shop}`);
+  }
+};
+
+/*
 import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
@@ -135,4 +158,4 @@ const resources = [
       </svg>
     ),
   },
-];
+]; */
