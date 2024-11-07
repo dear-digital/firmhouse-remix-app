@@ -17,22 +17,27 @@ const shopify = shopifyApi({
 });
 
 export let loader = async ({ request }) => {
-  const url = new URL(request.url);
-  const shop = url.searchParams.get("shop");
+  
+  try {
+    const url = new URL(request.url);
+    const shop = url.searchParams.get("shop");
+    if (!shop) {
+      throw new Error("Missing shop query parameter");
+    }
 
-  if (!shop) {
-    throw new Error("Missing shop query parameter");
+    // Begin the Shopify OAuth process
+    const authRoute = await shopify.auth.begin({
+      shop: shop,
+      callbackPath: "/auth/callback",
+      isOnline: true,
+      rawRequest: request, // Request from Remix
+      rawResponse: new Response(), // Response placeholder, won't be used
+    });
+
+    // Redirect the user to the Shopify authentication page
+    return redirect(authRoute);
   }
-
-  // Begin the Shopify OAuth process
-  const authRoute = await shopify.auth.begin({
-    shop: shop,
-    callbackPath: "/auth/callback",
-    isOnline: true,
-    rawRequest: request, // Request from Remix
-    rawResponse: new Response(), // Response placeholder, won't be used
-  });
-
-  // Redirect the user to the Shopify authentication page
-  return redirect(authRoute);
+  catch(error) {
+    console.error("Error in Shopify auth:", error);
+  }
 };

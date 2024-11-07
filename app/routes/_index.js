@@ -6,17 +6,22 @@ import { json } from "@remix-run/node";
 let shops = {};
 
 export let loader = async ({ request }) => {
-  // Get the query parameters
-  let url = new URL(request.url);
-  let shop = url.searchParams.get("shop");
+  try {
+    // Get the query parameters
+    let url = new URL(request.url);
+    let shop = url.searchParams.get("shop");
 
-  // Check if the shop exists
-  if (typeof shops[shop] !== "undefined") {
-    // Return a simple text response
-    return new Response("Hello World");
-  } else {
-    // Redirect to the /auth route with the shop query param
-    return redirect(`/auth?shop=${shop}`);
+    // Check if the shop exists
+    if (typeof shops[shop] !== "undefined") {
+      // Return a simple text response
+      return new Response("Hello World");
+    } else {
+      // Redirect to the /auth route with the shop query param
+      return redirect(`/auth?shop=${shop}`);
+    }
+  }
+  catch(error) {
+    console.error("Error in Shopify index:", error);
   }
 };
 
