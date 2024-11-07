@@ -11,7 +11,7 @@ const shopify = shopifyApi({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   scopes: process.env.SHOPIFY_API_SCOPES,
-  hostName: "https://firmhouse-remix-3p4pktr8r-deardigital.vercel.app",
+  hostName: "https://firmhouse-remix-k1zownwpz-deardigital.vercel.app",
   apiVersion: ApiVersion.October22,
   isEmbeddedApp: false,
 });
