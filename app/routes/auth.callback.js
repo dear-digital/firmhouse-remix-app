@@ -11,17 +11,17 @@ const shopify = shopifyApi({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   scopes: process.env.SHOPIFY_API_SCOPES,
-  hostName: process.env.HOST.replace(/https:\/\//, ''),
+  hostName: "https://firmhouse-remix-e95umwvhw-deardigital.vercel.app/", // process.env.HOST.replace(/https:\/\//, ''),
   apiVersion: ApiVersion.October22,
   isEmbeddedApp: false,
 });
 
-export let loader = async ({ request }) => {
+export let loader = async ({ request, response }) => {
   try {
     // Handle the Shopify callback
     const callbackResponse = await shopify.auth.callback({
-      rawRequest: request, // Remix request
-      // rawResponse: new Response(), // Not used in this case
+      // rawRequest: request, // Remix request
+      // rawResponse: response, // Not used in this case
     });
 
     console.log(callbackResponse); // Log the session data for debugging
@@ -36,6 +36,6 @@ export let loader = async ({ request }) => {
   } catch (error) {
     console.error("Error in Shopify auth callback:", error);
     // Handle error or redirect to an error page
-    return redirect("/error"); // You can customize this as needed
+    // return redirect("/error"); // You can customize this as needed
   }
 };

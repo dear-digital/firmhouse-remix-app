@@ -11,12 +11,12 @@ const shopify = shopifyApi({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET,
   scopes: process.env.SHOPIFY_API_SCOPES,
-  hostName: process.env.HOST.replace(/https:\/\//, ''),
+  hostName: "https://firmhouse-remix-e95umwvhw-deardigital.vercel.app/", // process.env.HOST.replace(/https:\/\//, ''),
   apiVersion: ApiVersion.October22,
   isEmbeddedApp: false,
 });
 
-export let loader = async ({ request }) => {
+export let loader = async ({ request, response }) => {
   
   try {
     const url = new URL(request.url);
@@ -25,20 +25,22 @@ export let loader = async ({ request }) => {
       throw new Error("Missing shop query parameter");
     }
 
+    console.log("Shop:", shop);
     // Begin the Shopify OAuth process
     const authRoute = await shopify.auth.begin({
       shop: shop,
       callbackPath: "/auth/callback",
       isOnline: true,
-      rawRequest: request, // Request from Remix
-      // rawResponse: new Response(), // Response placeholder, won't be used
+      // rawRequest: request, // Request from Remix
+      // rawResponse: response, // Response placeholder, won't be used
     });
 
+    console.log(authRoute);
     // Redirect the user to the Shopify authentication page
     return redirect(authRoute);
   }
   catch(error) {
     console.error("Error in Shopify auth:", error);
-    return redirect("/error");
+    return error;
   }
 };

@@ -1,13 +1,19 @@
 import {
+  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-
 import "./tailwind.css";
+
+import {LoaderFunctionArgs} from '@remix-run/node';
+import {AppProvider} from '@shopify/shopify-app-remix/react';
+
+import shopify from '~/shopify.server';
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,6 +46,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export async function loader({request}: LoaderFunctionArgs) {
+  await shopify.authenticate.admin(request);
+
+  return json({
+    apiKey: process.env.SHOPIFY_API_KEY,
+  });
+}
+
 export default function App() {
-  return <Outlet />;
+  const { apiKey = '' } = useLoaderData<typeof loader>() || {};
+
+  return (
+    <html>
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <AppProvider apiKey={apiKey} isEmbeddedApp>
+          <Outlet />
+        </AppProvider>
+      </body>
+    </html>
+  );
 }
